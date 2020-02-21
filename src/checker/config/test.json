@@ -1,0 +1,15 @@
+{
+  "configs": [
+    {
+      "name": "test1",
+      "type": "debug",
+      "config": {
+        "testKey": "testVal"
+      }
+    },
+    {
+      "name": "test2",
+      "type": "debug"
+    }
+  ]
+}

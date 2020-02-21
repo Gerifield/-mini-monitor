@@ -9,6 +9,8 @@ import (
 
 const loadFail = "loadFail"
 
+var errLoadFailed = errors.New("load failed")
+
 type debugChecker struct {
 }
 
@@ -20,8 +22,8 @@ func New() config.Checker {
 // Init .
 func (d *debugChecker) Init(conf map[string]interface{}) error {
 	if lf, ok := conf[loadFail]; ok {
-		if lf.(bool) {
-			return errors.New("load failed")
+		if b, ok := lf.(bool); ok && b {
+			return errLoadFailed
 		}
 	}
 	return nil
