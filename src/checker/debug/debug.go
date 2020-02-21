@@ -1,8 +1,6 @@
 package debug
 
 import (
-	"errors"
-
 	"github.com/gerifield/mini-monitor/src/checker/config"
 )
 
@@ -14,8 +12,6 @@ const (
 type debugChecker struct {
 	checkFail bool
 }
-
-var errCheckFailed = errors.New("check failed")
 
 // New .
 func New() config.Checker {

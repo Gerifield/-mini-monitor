@@ -61,3 +61,21 @@ func TestDockerInitImageRegex(t *testing.T) {
 		assert.Equal(t, tt.err, check.Init(tt.params))
 	}
 }
+
+func TestDockerInitDebug(t *testing.T) {
+	testTable := []struct {
+		params map[string]interface{}
+		err    error
+	}{
+		{params: nil, err: nil},
+		{params: map[string]interface{}{}, err: nil},
+		{params: map[string]interface{}{"testKey1": "testVal1"}, err: nil},
+		{params: map[string]interface{}{confDebug: "testRegex"}, err: config.ErrLoadFailed},
+		{params: map[string]interface{}{confDebug: true}, err: nil},
+	}
+
+	check := New()
+	for _, tt := range testTable {
+		assert.Equal(t, tt.err, check.Init(tt.params))
+	}
+}

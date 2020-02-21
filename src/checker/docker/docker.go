@@ -31,12 +31,14 @@ const (
 	confID         = "id"
 	confNameRegex  = "nameRegex"
 	confImageRegex = "imageRegex"
+	confDebug      = "debug"
 )
 
 type dockerChecker struct {
 	ID         string
 	nameRegex  *regexp.Regexp
 	imageRegex *regexp.Regexp
+	debug      bool
 }
 
 // New .
@@ -80,7 +82,14 @@ func (d *dockerChecker) Init(conf map[string]interface{}) error {
 		}
 	}
 
-	// TODO: Maybe add a debug flag to help the checking of the matching containers
+	// Load bool
+	if lf, ok := conf[confDebug]; ok {
+		if b, ok := lf.(bool); ok {
+			d.debug = b
+		} else {
+			return config.ErrLoadFailed
+		}
+	}
 	return nil
 }
 
@@ -92,11 +101,15 @@ func (d *dockerChecker) Check() error {
 		return fmt.Errorf("%s - %w", string(b), err)
 	}
 
+	if d.debug {
+		fmt.Println("docker ps output:", string(b))
+	}
+
 	var psOut dockerPSOutput
 	psOuts := make([]dockerPSOutput, 0)
 	decoder := json.NewDecoder(bytes.NewReader(b))
 	for {
-		err = decoder.Decode(&psOut) // TODO: Call this multiple times until we have data!!! (\n separated jsons)
+		err = decoder.Decode(&psOut)
 		if err != nil {
 			if err != io.EOF {
 				return err
@@ -113,14 +126,23 @@ func (d *dockerChecker) Check() error {
 func (d *dockerChecker) doChecks(psOuts []dockerPSOutput) error {
 	for _, o := range psOuts {
 		if o.ID == d.ID {
+			if d.debug {
+				fmt.Printf("ID match: %s\n", o.ID)
+			}
 			return nil
 		}
 
 		if d.nameRegex != nil && d.nameRegex.MatchString(o.Names) {
+			if d.debug {
+				fmt.Printf("Name match: %s (%s)\n", o.Names, o.ID)
+			}
 			return nil
 		}
 
 		if d.imageRegex != nil && d.imageRegex.MatchString(o.Image) {
+			if d.debug {
+				fmt.Printf("Image match: %s (%s)\n", o.Names, o.ID)
+			}
 			return nil
 		}
 	}
