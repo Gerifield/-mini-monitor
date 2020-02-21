@@ -2,7 +2,6 @@ package debug
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/gerifield/mini-monitor/src/checker/config"
 )
@@ -43,7 +42,6 @@ func (d *debugChecker) Init(conf map[string]interface{}) error {
 
 // Check .
 func (d *debugChecker) Check() error {
-	fmt.Println("debug check called")
 	if d.checkFail {
 		return errCheckFailed
 	}
