@@ -51,7 +51,11 @@ func main() {
 func doChecks(loadedModules map[string]config.Checker) {
 	fmt.Println("Module results:")
 	for n, m := range loadedModules {
-		fmt.Printf("%s: %t\n", n, m.Check() == nil)
+		err := m.Check()
+		fmt.Printf("%s: %t\n", n, err == nil)
+		if err != nil {
+			fmt.Println("\t", err)
+		}
 	}
 	fmt.Println()
 }

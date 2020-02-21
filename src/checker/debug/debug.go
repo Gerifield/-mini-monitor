@@ -43,7 +43,7 @@ func (d *debugChecker) Init(conf map[string]interface{}) error {
 // Check .
 func (d *debugChecker) Check() error {
 	if d.checkFail {
-		return errCheckFailed
+		return config.ErrCheckFailed
 	}
 	return nil
 }

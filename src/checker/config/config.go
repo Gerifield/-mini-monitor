@@ -10,6 +10,9 @@ import (
 var (
 	// ErrLoadFailed .
 	ErrLoadFailed = errors.New("load failed")
+
+	// ErrCheckFailed .
+	ErrCheckFailed = errors.New("check failed")
 )
 
 // Checker .

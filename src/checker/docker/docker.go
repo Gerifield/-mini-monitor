@@ -1,7 +1,10 @@
 package docker
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
 	"os/exec"
 	"regexp"
 
@@ -25,9 +28,9 @@ type dockerPSOutput struct {
 }
 
 const (
-	confID         = "ID"
-	confNameRegex  = "confNameRegex"
-	confImageRegex = "confImageRegex"
+	confID         = "id"
+	confNameRegex  = "nameRegex"
+	confImageRegex = "imageRegex"
 )
 
 type dockerChecker struct {
@@ -76,16 +79,50 @@ func (d *dockerChecker) Init(conf map[string]interface{}) error {
 			return config.ErrLoadFailed
 		}
 	}
+
+	// TODO: Maybe add a debug flag to help the checking of the matching containers
 	return nil
 }
 
 // Check .
 func (d *dockerChecker) Check() error {
-	cmd := exec.Command("docker", "ps", "--format '{{json . }}'")
+	cmd := exec.Command("docker", "ps", "--format", "{{json . }}")
 	b, err := cmd.CombinedOutput()
 	if err != nil {
-		return err
+		return fmt.Errorf("%s - %w", string(b), err)
 	}
-	fmt.Println(string(b))
-	return nil
+
+	var psOut dockerPSOutput
+	psOuts := make([]dockerPSOutput, 0)
+	decoder := json.NewDecoder(bytes.NewReader(b))
+	for {
+		err = decoder.Decode(&psOut) // TODO: Call this multiple times until we have data!!! (\n separated jsons)
+		if err != nil {
+			if err != io.EOF {
+				return err
+			}
+			break
+		}
+		psOuts = append(psOuts, psOut)
+	}
+
+	// Do the checks on the output
+	return d.doChecks(psOuts)
+}
+
+func (d *dockerChecker) doChecks(psOuts []dockerPSOutput) error {
+	for _, o := range psOuts {
+		if o.ID == d.ID {
+			return nil
+		}
+
+		if d.nameRegex != nil && d.nameRegex.MatchString(o.Names) {
+			return nil
+		}
+
+		if d.imageRegex != nil && d.imageRegex.MatchString(o.Image) {
+			return nil
+		}
+	}
+	return config.ErrCheckFailed // No match found
 }
