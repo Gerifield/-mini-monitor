@@ -11,6 +11,34 @@ Simply run the following command:
 $ go build src/cmd/monitor/monitor.go
 ```
 
+## Run
+
+```
+$ monitor -listen :8080 -config config.json
+```
+
+By default the web UI will listen on `localhost:8080`.
+
+You could open the following URLs in your browser:
+- `/` - HTML web UI
+- `/api` - JSON based status endpoint
+
+Web UI example:
+![web ui](misc/pictures/screenshot1.png)
+
+JSON response structure:
+```
+{
+   "checks":{
+      "docker-alpine":false,
+      "test1":true,
+      "test3":true,
+      "test4":false
+   }
+}
+```
+
+
 ## Configuration
 
 Put a json file with a similar content like:
