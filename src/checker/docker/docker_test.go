@@ -79,3 +79,35 @@ func TestDockerInitDebug(t *testing.T) {
 		assert.Equal(t, tt.err, check.Init(tt.params))
 	}
 }
+
+func TestDoChecks(t *testing.T) {
+	testTable := []struct {
+		input []dockerPSOutput
+		err   error
+	}{
+		{nil, config.ErrCheckFailed},
+		{[]dockerPSOutput{genOutput("noID", "noImage", "noName")}, config.ErrCheckFailed},
+		{[]dockerPSOutput{genOutput("testID", "noImage", "noName")}, nil},
+		{[]dockerPSOutput{genOutput("noID", "testImage", "noName")}, nil},
+		{[]dockerPSOutput{genOutput("noID", "noImage", "testName")}, nil},
+	}
+
+	check := New()
+	assert.NoError(t, check.Init(map[string]interface{}{
+		confID:         "testID",
+		confImageRegex: "testImage",
+		confNameRegex:  "testName",
+	}))
+
+	for _, tt := range testTable {
+		assert.Equal(t, tt.err, check.(*dockerChecker).doChecks(tt.input))
+	}
+}
+
+func genOutput(ID, image, name string) dockerPSOutput {
+	return dockerPSOutput{
+		ID:    ID,
+		Image: image,
+		Names: name,
+	}
+}
