@@ -7,12 +7,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/gerifield/mini-monitor/src/checker/loader"
+	"github.com/gerifield/mini-monitor/src/loader"
 
 	"github.com/gerifield/mini-monitor/src/checker/debug"
 	"github.com/gerifield/mini-monitor/src/checker/docker"
 
-	"github.com/gerifield/mini-monitor/src/checker/config"
+	"github.com/gerifield/mini-monitor/src/config"
 )
 
 var availableCheckers = map[string]func() config.Checker{

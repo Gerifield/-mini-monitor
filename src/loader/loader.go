@@ -3,7 +3,7 @@ package loader
 import (
 	"log"
 
-	"github.com/gerifield/mini-monitor/src/checker/config"
+	"github.com/gerifield/mini-monitor/src/config"
 )
 
 func LoadModules(checkInitFns map[string]func() config.Checker, checks config.Conf) map[string]config.Checker {

@@ -1,7 +1,7 @@
 package debug
 
 import (
-	"github.com/gerifield/mini-monitor/src/checker/config"
+	"github.com/gerifield/mini-monitor/src/config"
 )
 
 const (

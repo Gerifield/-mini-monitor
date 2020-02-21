@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"regexp"
 
-	"github.com/gerifield/mini-monitor/src/checker/config"
+	"github.com/gerifield/mini-monitor/src/config"
 )
 
 type dockerPSOutput struct {

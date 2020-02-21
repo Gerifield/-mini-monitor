@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/gerifield/mini-monitor/src/checker/config"
+	"github.com/gerifield/mini-monitor/src/config"
 )
 
 func TestInitLoadFail(t *testing.T) {
