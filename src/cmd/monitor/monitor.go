@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -21,7 +20,7 @@ var availableCheckers = map[string]func() config.Checker{
 }
 
 func main() {
-	listenAddr := flag.String("listen", ":8080", "HTTP endpoint listen")
+	listenAddr := flag.String("listen", "127.0.0.1:8080", "HTTP endpoint listen")
 	configFile := flag.String("config", "config.json", "Config file")
 	flag.Parse()
 
@@ -37,33 +36,31 @@ func main() {
 	}
 
 	loadedModules := loader.LoadModules(availableCheckers, checks)
-	fmt.Printf("Loaded %d modules\n", len(loadedModules))
+	log.Printf("Loaded %d modules\n", len(loadedModules))
 
 	checkCache := cache.New()
 	srv := server.New(*listenAddr, checkCache)
-	go srv.Start()
+	go func() { _ = srv.Start() }()
 
 	ticker := time.NewTicker(checks.CheckTime)
 	doChecks(loadedModules, checkCache)
 	for _ = range ticker.C {
-		fmt.Println("Do checks!")
 		doChecks(loadedModules, checkCache)
 	}
 }
 
 func doChecks(loadedModules map[string]config.Checker, cache *cache.Cache) {
-	fmt.Println("Module results:")
+	//fmt.Println("Module results:")
 	for n, m := range loadedModules {
 		err := m.Check()
 
-		fmt.Print(n)
+		//fmt.Print(n)
 		if err != nil {
-			fmt.Println("", err)
+			//fmt.Println("", err)
 			cache.Set(n, false)
 		} else {
-			fmt.Println(" ok")
+			//fmt.Println(" ok")
 			cache.Set(n, true)
 		}
 	}
-	fmt.Println()
 }
