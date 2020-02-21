@@ -42,7 +42,6 @@ func main() {
 	ticker := time.NewTicker(checks.CheckTime)
 
 	doChecks(loadedModules)
-
 	for _ = range ticker.C {
 		fmt.Println("Do checks!")
 		doChecks(loadedModules)
@@ -54,4 +53,5 @@ func doChecks(loadedModules map[string]config.Checker) {
 	for n, m := range loadedModules {
 		fmt.Printf("%s: %t\n", n, m.Check() == nil)
 	}
+	fmt.Println()
 }
