@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -13,19 +14,21 @@ func TestReadConfig(t *testing.T) {
 	require.NoError(t, err)
 	defer func() { _ = f.Close() }()
 
-	checks, err := ReadConfig(f)
+	conf, err := ReadConfig(f)
 	assert.NoError(t, err)
-	require.Len(t, checks.Configs, 2)
+	assert.Equal(t, 10*time.Second, conf.CheckTime)
+
+	require.Len(t, conf.Configs, 2)
 
 	assert.Equal(t, CheckConfig{
 		Name:   "test1",
 		Type:   "debug",
 		Config: map[string]interface{}{"testKey": "testVal"},
-	}, checks.Configs[0])
+	}, conf.Configs[0])
 
 	assert.Equal(t, CheckConfig{
 		Name:   "test2",
 		Type:   "debug",
 		Config: nil,
-	}, checks.Configs[1])
+	}, conf.Configs[1])
 }

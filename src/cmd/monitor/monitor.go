@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/gerifield/mini-monitor/src/checker/loader"
 
@@ -36,4 +37,10 @@ func main() {
 
 	loadedModules := loader.LoadModules(availableCheckers, checks)
 	fmt.Printf("Loaded %d modules\n", len(loadedModules))
+
+	// TODO: do actual checking and create a web API to access the results (?)
+	ticker := time.NewTicker(checks.CheckTime)
+	for _ = range ticker.C {
+		fmt.Println("Do checks!")
+	}
 }

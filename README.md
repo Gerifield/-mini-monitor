@@ -16,6 +16,7 @@ $ go build src/cmd/monitor/monitor.go
 Put a json file with a similar content like:
 ```
 {
+  "checkTime": "5s",
   "configs": [
     {
       "name": "unique-config-name",

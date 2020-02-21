@@ -6,7 +6,7 @@ import (
 	"github.com/gerifield/mini-monitor/src/checker/config"
 )
 
-func LoadModules(checkInitFns map[string]func() config.Checker, checks config.Checks) map[string]config.Checker {
+func LoadModules(checkInitFns map[string]func() config.Checker, checks config.Conf) map[string]config.Checker {
 	loadedModules := make(map[string]config.Checker, 0)
 	var module config.Checker
 	var err error

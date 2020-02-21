@@ -1,4 +1,5 @@
 {
+  "checkTime": "10s",
   "configs": [
     {
       "name": "test1",

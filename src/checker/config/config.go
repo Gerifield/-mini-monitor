@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"time"
 )
 
 var (
@@ -17,9 +18,16 @@ type Checker interface {
 	Check() error
 }
 
-// Checks .
-type Checks struct {
-	Configs []CheckConfig `json:"configs"`
+// Conf .
+type Conf struct {
+	CheckTime time.Duration
+	Configs   []CheckConfig
+}
+
+type confFile struct {
+	// Duration miss the unmarshaler so we need a bit workaround
+	CheckTime string        `json:"checkTime"`
+	Configs   []CheckConfig `json:"configs"`
 }
 
 // CheckConfig has the structure of the config file
@@ -31,8 +39,23 @@ type CheckConfig struct {
 }
 
 // ReadConfig form an io.Reader
-func ReadConfig(r io.Reader) (Checks, error) {
-	var checks Checks
-	err := json.NewDecoder(r).Decode(&checks)
+func ReadConfig(r io.Reader) (Conf, error) {
+	var checks Conf
+
+	var confFile confFile
+	err := json.NewDecoder(r).Decode(&confFile)
+	if err != nil {
+		return checks, err
+	}
+
+	// Parse the check duration
+	d, err := time.ParseDuration(confFile.CheckTime)
+	if err != nil {
+		return checks, err
+	}
+
+	checks.CheckTime = d
+	// Copy the rest
+	checks.Configs = confFile.Configs
 	return checks, err
 }
