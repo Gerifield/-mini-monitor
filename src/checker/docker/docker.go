@@ -1,6 +1,8 @@
 package docker
 
 import (
+	"fmt"
+	"os/exec"
 	"regexp"
 
 	"github.com/gerifield/mini-monitor/src/checker/config"
@@ -22,7 +24,7 @@ type dockerPSOutput struct {
 	Status       string `json:"Status"`
 }
 
-var (
+const (
 	confID         = "ID"
 	confNameRegex  = "confNameRegex"
 	confImageRegex = "confImageRegex"
@@ -79,5 +81,11 @@ func (d *dockerChecker) Init(conf map[string]interface{}) error {
 
 // Check .
 func (d *dockerChecker) Check() error {
+	cmd := exec.Command("docker", "ps", "--format '{{json . }}'")
+	b, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(b))
 	return nil
 }

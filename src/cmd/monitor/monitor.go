@@ -40,7 +40,18 @@ func main() {
 
 	// TODO: do actual checking and create a web API to access the results (?)
 	ticker := time.NewTicker(checks.CheckTime)
+
+	doChecks(loadedModules)
+
 	for _ = range ticker.C {
 		fmt.Println("Do checks!")
+		doChecks(loadedModules)
+	}
+}
+
+func doChecks(loadedModules map[string]config.Checker) {
+	fmt.Println("Module results:")
+	for n, m := range loadedModules {
+		fmt.Printf("%s: %t\n", n, m.Check() == nil)
 	}
 }

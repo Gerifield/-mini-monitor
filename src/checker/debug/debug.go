@@ -1,15 +1,22 @@
 package debug
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/gerifield/mini-monitor/src/checker/config"
 )
 
-const loadFail = "loadFail"
+const (
+	loadFail  = "loadFail"
+	checkFail = "checkFail"
+)
 
 type debugChecker struct {
+	checkFail bool
 }
+
+var errCheckFailed = errors.New("check failed")
 
 // New .
 func New() config.Checker {
@@ -23,11 +30,22 @@ func (d *debugChecker) Init(conf map[string]interface{}) error {
 			return config.ErrLoadFailed
 		}
 	}
+
+	if lf, ok := conf[checkFail]; ok {
+		if b, ok := lf.(bool); ok {
+			d.checkFail = b
+		} else {
+			return config.ErrLoadFailed
+		}
+	}
 	return nil
 }
 
 // Check .
 func (d *debugChecker) Check() error {
 	fmt.Println("debug check called")
+	if d.checkFail {
+		return errCheckFailed
+	}
 	return nil
 }
