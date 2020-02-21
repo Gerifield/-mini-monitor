@@ -7,12 +7,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/gerifield/mini-monitor/src/loader"
-
+	"github.com/gerifield/mini-monitor/src/cache"
 	"github.com/gerifield/mini-monitor/src/checker/debug"
 	"github.com/gerifield/mini-monitor/src/checker/docker"
-
 	"github.com/gerifield/mini-monitor/src/config"
+	"github.com/gerifield/mini-monitor/src/loader"
+	"github.com/gerifield/mini-monitor/src/server"
 )
 
 var availableCheckers = map[string]func() config.Checker{
@@ -21,6 +21,7 @@ var availableCheckers = map[string]func() config.Checker{
 }
 
 func main() {
+	listenAddr := flag.String("listen", ":8080", "HTTP endpoint listen")
 	configFile := flag.String("config", "config.json", "Config file")
 	flag.Parse()
 
@@ -38,23 +39,30 @@ func main() {
 	loadedModules := loader.LoadModules(availableCheckers, checks)
 	fmt.Printf("Loaded %d modules\n", len(loadedModules))
 
-	// TODO: do actual checking and create a web API to access the results (?)
-	ticker := time.NewTicker(checks.CheckTime)
+	checkCache := cache.New()
+	srv := server.New(*listenAddr, checkCache)
+	go srv.Start()
 
-	doChecks(loadedModules)
+	ticker := time.NewTicker(checks.CheckTime)
+	doChecks(loadedModules, checkCache)
 	for _ = range ticker.C {
 		fmt.Println("Do checks!")
-		doChecks(loadedModules)
+		doChecks(loadedModules, checkCache)
 	}
 }
 
-func doChecks(loadedModules map[string]config.Checker) {
+func doChecks(loadedModules map[string]config.Checker, cache *cache.Cache) {
 	fmt.Println("Module results:")
 	for n, m := range loadedModules {
 		err := m.Check()
-		fmt.Printf("%s: %t\n", n, err == nil)
+
+		fmt.Print(n)
 		if err != nil {
-			fmt.Println("\t", err)
+			fmt.Println("", err)
+			cache.Set(n, false)
+		} else {
+			fmt.Println(" ok")
+			cache.Set(n, true)
 		}
 	}
 	fmt.Println()
