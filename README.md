@@ -53,3 +53,9 @@ Basic docker container checker using the `docker ps` command.
 Type definition: `docker`
 
 Possible keys:
+ - `id` is the container id check
+ - `nameRegex` is the regular expression to match on a container's name
+ - `imageRegex` is the regular expression to match on an image's name
+
+They are all optional and will match these fields to the `docker ps` output, but be careful if there are multiple matches it'll grab and check the first match only!
+(Use the `id` if you'd like to guarantee to have a single match or use unique container names.)

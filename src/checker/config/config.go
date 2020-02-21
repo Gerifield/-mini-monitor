@@ -2,7 +2,13 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
+)
+
+var (
+	// ErrLoadFailed .
+	ErrLoadFailed = errors.New("load failed")
 )
 
 // Checker .

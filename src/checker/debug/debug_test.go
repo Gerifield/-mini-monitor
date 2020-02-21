@@ -4,10 +4,11 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/gerifield/mini-monitor/src/checker/config"
 )
 
 func TestInit(t *testing.T) {
-
 	testTable := []struct {
 		params map[string]interface{}
 		err    error
@@ -16,7 +17,7 @@ func TestInit(t *testing.T) {
 		{params: map[string]interface{}{}, err: nil},
 		{params: map[string]interface{}{"testKey1": "testVal1"}, err: nil},
 		{params: map[string]interface{}{loadFail: "testVal1"}, err: nil},
-		{params: map[string]interface{}{loadFail: true}, err: errLoadFailed},
+		{params: map[string]interface{}{loadFail: true}, err: config.ErrLoadFailed},
 	}
 
 	check := New()
