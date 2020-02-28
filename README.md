@@ -90,3 +90,29 @@ Possible keys:
 
 They are all optional and will match these fields to the `docker ps` output, but be careful if there are multiple matches it'll grab and check the first match only!
 (Use the `id` if you'd like to guarantee to have a single match or use unique container names.)
+
+#### HTTP
+
+Type definition: `http`
+
+Possible keys:
+- `method` (string) is the HTTP method to use (auto converted to upper-case)
+- `url` (string) is the HTTP URL to call
+- `body` (string) is the HTTP request body
+- `headers` (map[string]string) are the request headers in a key - value format
+- `expectedCode` (int) is the HTTP response code for the successful check
+
+The `method`, `url` and `expectedCode` are required.
+
+Example config:
+```
+{
+  "name": "test-http",
+   "type": "http",
+   "config": {
+     "method": "get",
+     "url": "http://192.168.0.1:3001/",
+     "expectedCode": 200
+   }
+ }
+```

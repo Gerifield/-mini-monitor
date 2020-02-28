@@ -9,6 +9,7 @@ import (
 	"github.com/gerifield/mini-monitor/src/cache"
 	"github.com/gerifield/mini-monitor/src/checker/debug"
 	"github.com/gerifield/mini-monitor/src/checker/docker"
+	"github.com/gerifield/mini-monitor/src/checker/http"
 	"github.com/gerifield/mini-monitor/src/config"
 	"github.com/gerifield/mini-monitor/src/loader"
 	"github.com/gerifield/mini-monitor/src/server"
@@ -17,6 +18,7 @@ import (
 var availableCheckers = map[string]func() config.Checker{
 	"debug":  debug.New,
 	"docker": docker.New,
+	"http":   http.New,
 }
 
 func main() {
