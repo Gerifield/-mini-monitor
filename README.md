@@ -111,7 +111,10 @@ Example config:
    "type": "http",
    "config": {
      "method": "get",
-     "url": "http://192.168.0.1:3001/",
+     "url": "http://192.168.0.100:3001/",
+     "headers": {
+       "Authorization": "Bearer testToken"
+     },
      "expectedCode": 200
    }
  }
