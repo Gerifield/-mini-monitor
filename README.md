@@ -1,4 +1,4 @@
-# Mini monitor
+# Mini monitor [![Build Status](https://travis-ci.org/Gerifield/mini-monitor.svg?branch=master)](https://travis-ci.org/Gerifield/mini-monitor)
 
 This is a small a standalone status page for multiple service checks.
 (Like Nagios just much dumber.)
