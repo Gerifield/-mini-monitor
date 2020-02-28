@@ -8,6 +8,8 @@ import (
 	"os/exec"
 	"regexp"
 
+	"github.com/gerifield/mini-monitor/src/loader"
+
 	"github.com/gerifield/mini-monitor/src/config"
 )
 
@@ -50,45 +52,35 @@ func New() config.Checker {
 func (d *dockerChecker) Init(conf map[string]interface{}) error {
 	var err error
 	// Load the ID matcher
-	if lf, ok := conf[confID]; ok {
-		if id, ok := lf.(string); ok {
-			d.ID = id
-		} else {
-			return config.ErrLoadFailed
-		}
+	d.ID, err = loader.ConfigString(conf, confID)
+	if err != nil {
+		return err
 	}
 
 	// Load the name regex
-	if lf, ok := conf[confNameRegex]; ok {
-		if regex, ok := lf.(string); ok {
-			d.nameRegex, err = regexp.Compile(regex)
-			if err != nil {
-				return config.ErrLoadFailed
-			}
-		} else {
-			return config.ErrLoadFailed
-		}
+	nameRegexStr, err := loader.ConfigString(conf, confNameRegex)
+	if err != nil {
+		return err
+	}
+	d.nameRegex, err = regexp.Compile(nameRegexStr)
+	if err != nil {
+		return config.ErrLoadFailed
 	}
 
 	// Load image regex
-	if lf, ok := conf[confImageRegex]; ok {
-		if regex, ok := lf.(string); ok {
-			d.imageRegex, err = regexp.Compile(regex)
-			if err != nil {
-				return config.ErrLoadFailed
-			}
-		} else {
-			return config.ErrLoadFailed
-		}
+	imageRegexStr, err := loader.ConfigString(conf, confImageRegex)
+	if err != nil {
+		return err
+	}
+	d.imageRegex, err = regexp.Compile(imageRegexStr)
+	if err != nil {
+		return config.ErrLoadFailed
 	}
 
 	// Load bool
-	if lf, ok := conf[confDebug]; ok {
-		if b, ok := lf.(bool); ok {
-			d.debug = b
-		} else {
-			return config.ErrLoadFailed
-		}
+	d.debug, err = loader.ConfigBool(conf, confDebug)
+	if err != nil {
+		return err
 	}
 	return nil
 }

@@ -28,3 +28,31 @@ func LoadModules(checkInitFns map[string]func() config.Checker, checks config.Co
 	}
 	return loadedModules
 }
+
+// ConfigString reads and converts a value from the config map as string
+func ConfigString(conf map[string]interface{}, key string) (string, error) {
+	if val, ok := conf[key]; ok {
+		// If it's found try to cast it or fail
+		if valStr, ok := val.(string); ok {
+			return valStr, nil
+		}
+		return "", config.ErrLoadFailed
+	}
+
+	// Ignore if it's not found to init the variable with the default/empty value
+	return "", nil
+}
+
+// ConfigBool reads and converts a value from config map as bool
+func ConfigBool(conf map[string]interface{}, key string) (bool, error) {
+	if val, ok := conf[key]; ok {
+		// If it's found try to cast it or fail
+		if valBool, ok := val.(bool); ok {
+			return valBool, nil
+		}
+		return false, config.ErrLoadFailed
+	}
+
+	// Ignore if it's not found to init the variable with the default/empty value
+	return false, nil
+}
