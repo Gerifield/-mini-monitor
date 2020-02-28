@@ -3,7 +3,7 @@ package loader
 import (
 	"log"
 
-	"github.com/gerifield/mini-monitor/src/config"
+	"github.com/Gerifield/mini-monitor/src/config"
 )
 
 // LoadModules .

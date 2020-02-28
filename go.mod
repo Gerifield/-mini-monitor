@@ -1,4 +1,4 @@
-module github.com/gerifield/mini-monitor
+module github.com/Gerifield/mini-monitor
 
 go 1.13
 

@@ -8,9 +8,8 @@ import (
 	"os/exec"
 	"regexp"
 
-	"github.com/gerifield/mini-monitor/src/loader"
-
-	"github.com/gerifield/mini-monitor/src/config"
+	"github.com/Gerifield/mini-monitor/src/config"
+	"github.com/Gerifield/mini-monitor/src/loader"
 )
 
 type dockerPSOutput struct {

@@ -1,1 +1,9 @@
 language: go
+
+go:
+  - tip
+  - 1.13
+
+env: GO111MODULE=on GOFLAGS='-mod vendor'
+
+script: go test -v ./...

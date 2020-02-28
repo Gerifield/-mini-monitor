@@ -6,13 +6,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/gerifield/mini-monitor/src/cache"
-	"github.com/gerifield/mini-monitor/src/checker/debug"
-	"github.com/gerifield/mini-monitor/src/checker/docker"
-	"github.com/gerifield/mini-monitor/src/checker/http"
-	"github.com/gerifield/mini-monitor/src/config"
-	"github.com/gerifield/mini-monitor/src/loader"
-	"github.com/gerifield/mini-monitor/src/server"
+	"github.com/Gerifield/mini-monitor/src/cache"
+	"github.com/Gerifield/mini-monitor/src/checker/debug"
+	"github.com/Gerifield/mini-monitor/src/checker/docker"
+	"github.com/Gerifield/mini-monitor/src/checker/http"
+	"github.com/Gerifield/mini-monitor/src/config"
+	"github.com/Gerifield/mini-monitor/src/loader"
+	"github.com/Gerifield/mini-monitor/src/server"
 )
 
 var availableCheckers = map[string]func() config.Checker{

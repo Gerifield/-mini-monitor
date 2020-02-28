@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gerifield/mini-monitor/src/config"
-	"github.com/gerifield/mini-monitor/src/loader"
+	"github.com/Gerifield/mini-monitor/src/config"
+	"github.com/Gerifield/mini-monitor/src/loader"
 )
 
 const (

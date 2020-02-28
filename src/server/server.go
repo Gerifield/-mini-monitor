@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/gerifield/mini-monitor/src/cache"
+	"github.com/Gerifield/mini-monitor/src/cache"
 )
 
 type Handler struct {

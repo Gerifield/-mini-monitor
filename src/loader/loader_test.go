@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/gerifield/mini-monitor/src/config"
+	"github.com/Gerifield/mini-monitor/src/config"
 )
 
 var (
